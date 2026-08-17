@@ -1,6 +1,6 @@
-# Projeto Mão Amiga (CompreBem)
+# Compre Bem
 
-O **Projeto Mão Amiga** é uma aplicação mobile desenvolvida em React Native (Expo) criada para facilitar a visualização e gestão de produtos de forma rápida, ajudando no controle e na consulta prática de itens do dia a dia.
+O **Compre Bem** é uma aplicação mobile desenvolvida em React Native (Expo) criada para facilitar a visualização e gestão de produtos de forma rápida, ajudando no controle e na consulta prática de itens do dia a dia.
 
 ---
 
