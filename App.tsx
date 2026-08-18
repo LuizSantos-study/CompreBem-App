@@ -1,7 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Button } from 'react-native';
 import { useState } from 'react';
-import { Button } from 'react-native';
 
 type ProdutoType = {
   id: string;
@@ -12,7 +11,7 @@ type ProdutoType = {
 };
 
 const PRODUTOS_MOCK: ProdutoType[] = [
-  { id: '1', nome: 'Notebook', preco: 3500.00, descricao: '16GB RAM, SSD 512GB', estoque : 10 },
+  { id: '1', nome: 'Notebook', preco: 3500.00, descricao: '16GB RAM, SSD 512GB', estoque: 10 },
   { id: '2', nome: 'Mouse Vertical', preco: 150.00, descricao: 'Ergonômico sem fio', estoque: 5 },
 ];
 
@@ -28,9 +27,11 @@ export default function App() {
 function ListaProdutos() {
   return (
     <View style={styles.listContainer}>
-      {PRODUTOS_MOCK.map((item) => (
-        <Produto key={item.id} dados={item} />
-      ))}
+      <FlatList
+        data={PRODUTOS_MOCK}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <Produto dados={item} />}
+      />
     </View>
   );
 }
@@ -63,6 +64,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     width: '80%',
+    flex: 1, // Garante que a FlatList ocupe o espaço disponível para rolagem
   },
   card: {
     backgroundColor: '#fff',
