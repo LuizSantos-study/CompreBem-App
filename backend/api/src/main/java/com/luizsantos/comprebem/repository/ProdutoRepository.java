@@ -1,4 +1,4 @@
-package com.luizsantos.combrebem.repository;
+package com.luizsantos.comprebem.repository;
 
 import org.springframework.stereotype.Repository;
 

@@ -1,13 +1,13 @@
-package com.luizsantos.combrebem;
+package com.luizsantos.comprebem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CombrebemApplication {
+public class ComprebemApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CombrebemApplication.class, args);
+		SpringApplication.run(ComprebemApplication.class, args);
 	}
 
 }

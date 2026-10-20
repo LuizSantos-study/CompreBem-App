@@ -1,4 +1,4 @@
-package com.luizsantos.combrebem.dto;
+package com.luizsantos.comprebem.dto;
 
 public record ProdutoRequest() {
     

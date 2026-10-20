@@ -1,4 +1,4 @@
-package com.luizsantos.combrebem.service;
+package com.luizsantos.comprebem.service;
 
 import org.springframework.stereotype.Service;
 

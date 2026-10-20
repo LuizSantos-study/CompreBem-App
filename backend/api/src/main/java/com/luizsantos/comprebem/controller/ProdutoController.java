@@ -1,4 +1,4 @@
-package com.luizsantos.combrebem.controller;
+package com.luizsantos.comprebem.controller;
 
 import org.springframework.stereotype.Controller;
 
