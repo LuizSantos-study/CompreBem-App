@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/produtos")
@@ -49,13 +48,15 @@ public class ProdutoController {
         return produtoService.findAll();
     }
 
-    // Busca por ID (GET /api/v1/produtos/{id}) - Retorna 404 se não existir
+    // Busca por ID (GET /api/v1/produtos/{id}) - Retorna 200 OK ou 404 Not Found
     @GetMapping("/{id}")
-    public ProdutoResponse findById(@PathVariable UUID id) {
-        return produtoService.findById(id);
+    public ResponseEntity<ProdutoResponse> findById(@PathVariable Long id) {
+        return produtoService.buscarPorIdOptional(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Busca por filtro (GET /api/v1/produtos/filtro?filtro=...)
+    // Busca por filtro JPQL (GET /api/v1/produtos/filtro?filtro=...)
     @GetMapping("/filtro")
     public List<ProdutoResponse> findByFiltro(@RequestParam String filtro) {
         return produtoService.findByFiltro(filtro);
@@ -70,14 +71,14 @@ public class ProdutoController {
 
     // Atualização de produto (PUT /api/v1/produtos/{produtoId})
     @PutMapping("/{produtoId}")
-    public ProdutoResponse update(@PathVariable UUID produtoId, @Valid @RequestBody ProdutoRequest produto) {
+    public ProdutoResponse update(@PathVariable Long produtoId, @Valid @RequestBody ProdutoRequest produto) {
         return produtoService.update(produtoId, produto);
     }
 
     // Exclusão de produto (DELETE /api/v1/produtos/{produtoId})
     @DeleteMapping("/{produtoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable UUID produtoId) {
+    public void delete(@PathVariable Long produtoId) {
         produtoService.delete(produtoId);
     }
 }

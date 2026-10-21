@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import TelaListaProdutos, { produtosIniciais, Produto } from './telas/TelaListaProdutos';
+import TelaListaProdutos from './telas/TelaListaProdutos';
 import TelaDetalheProduto from './telas/TelaDetalheProduto';
 
 const Stack = createNativeStackNavigator();
@@ -13,7 +13,6 @@ const Stack = createNativeStackNavigator();
 const CHAVE_FAVORITOS = '@compre_bem:favoritos';
 
 export default function App() {
-  const [produtos, setProdutos] = useState<Produto[]>(produtosIniciais);
   const [favoritos, setFavoritos] = useState<number[]>([]);
 
   // Carrega os favoritos persistidos ao iniciar o aplicativo
@@ -22,7 +21,10 @@ export default function App() {
       try {
         const dados = await AsyncStorage.getItem(CHAVE_FAVORITOS);
         if (dados !== null) {
-          setFavoritos(JSON.parse(dados));
+          const lista = JSON.parse(dados);
+          if (Array.isArray(lista)) {
+            setFavoritos(lista.map((id) => Number(id)).filter((id) => !isNaN(id)));
+          }
         }
       } catch (error) {
         console.error('Erro ao carregar favoritos:', error);
@@ -46,10 +48,6 @@ export default function App() {
     }
   }
 
-  function adicionarProduto(novoProduto: Produto) {
-    setProdutos((atual) => [...atual, novoProduto]);
-  }
-
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="ListaProdutos">
@@ -60,8 +58,6 @@ export default function App() {
           {(props) => (
             <TelaListaProdutos 
               {...props} 
-              produtos={produtos} 
-              onAdicionarProduto={adicionarProduto} 
               favoritos={favoritos}
               onToggleFavorito={toggleFavorito}
             />

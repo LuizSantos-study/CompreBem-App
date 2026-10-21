@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 @Service
 public class ProdutoService {
@@ -30,18 +30,24 @@ public class ProdutoService {
                 .toList();
     }
 
-    // Listagem paginada (respeita page, size=20 e limite máximo=50)
+    // Listagem paginada (respeita page, size=20 e limite máximo=50, com busca por nome case-insensitive)
     public Page<ProdutoResponse> findAllPaginado(String busca, Pageable pageable) {
         if (busca != null && !busca.trim().isEmpty()) {
-            return produtoRepository.findByFiltro(busca.trim(), pageable)
+            return produtoRepository.findByNomeContainingIgnoreCase(busca.trim(), pageable)
                     .map(ProdutoResponse::toDto);
         }
         return produtoRepository.findAll(pageable)
                 .map(ProdutoResponse::toDto);
     }
 
+    // Busca por ID retornando Optional para tratamento 404 com ResponseEntity.notFound().build()
+    public Optional<ProdutoResponse> buscarPorIdOptional(Long id) {
+        return produtoRepository.findById(id)
+                .map(ProdutoResponse::toDto);
+    }
+
     // Busca por ID lançando 404 Not Found caso não exista
-    public ProdutoResponse findById(UUID id) {
+    public ProdutoResponse findById(Long id) {
         Produto produto = produtoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
         return ProdutoResponse.toDto(produto);
@@ -62,8 +68,8 @@ public class ProdutoService {
         return ProdutoResponse.toDto(salvo);
     }
 
-    // Atualiza um produto existente pelo UUID
-    public ProdutoResponse update(UUID produtoId, ProdutoRequest request) {
+    // Atualiza um produto existente pelo ID numérico (Long)
+    public ProdutoResponse update(Long produtoId, ProdutoRequest request) {
         Produto existente = produtoRepository.findById(produtoId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
 
@@ -78,8 +84,8 @@ public class ProdutoService {
         return ProdutoResponse.toDto(atualizado);
     }
 
-    // Remove um produto pelo UUID
-    public void delete(UUID produtoId) {
+    // Remove um produto pelo ID numérico (Long)
+    public void delete(Long produtoId) {
         if (!produtoRepository.existsById(produtoId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto não encontrado");
         }

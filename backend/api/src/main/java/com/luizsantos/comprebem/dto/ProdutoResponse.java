@@ -2,10 +2,9 @@ package com.luizsantos.comprebem.dto;
 
 import com.luizsantos.comprebem.model.Produto;
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public record ProdutoResponse(
-        UUID produtoId,
+        Long produtoId,
         String nome,
         String descricao,
         BigDecimal preco,
